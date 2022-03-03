@@ -1,26 +1,77 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { createElement, FunctionComponent, SetStateAction, useContext, useEffect } from "react";
+import { ReactFragment } from "react";
+import { ReactNode } from "react";
+import styled from "styled-components";
+import {
+  EventInfoProps,
+  EventInfoProvider,
+  ImageSlider,
+  MainContainer,
+  MapInfoContext,
+  MapInfoProps,
+  MapInfoProvider,
+} from "./MapInfo";
+
+// const AppProvider = ({ contexts, children }) =>
+//   contexts.reduce(
+//     (prev, context) =>
+//       createElement(context, {
+//         children: prev,
+//       }),
+//     children,
+//   );
+
+const AppProv = () => {
+  const { isVisible, setIsVisible }: { isVisible: boolean; setIsVisible: React.Dispatch<SetStateAction<boolean>> } =
+    useContext(MapInfoContext);
+
+  useEffect(() => {
+    console.log(isVisible, setIsVisible);
+  }, [isVisible, setIsVisible]);
+
+  return <h1>.</h1>;
+};
+type ContextsProvider = typeof MapInfoProvider | typeof EventInfoProvider;
+
+const AppProvider = ({ contexts, children }: { contexts: ContextsProvider[]; children: ReactNode }) => {
+  return (
+    <>
+      {contexts.reduce(
+        //
+        (pre, context) =>
+          createElement(context, {
+            children: pre,
+          }),
+        children
+      )}
+    </>
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContainter>
+      <AppProvider
+        contexts={[
+          //
+          MapInfoProvider,
+          EventInfoProvider,
+        ]}
+      >
+        <MainContainer />
+      </AppProvider>
+      <ImageSlider>
+        <h1>1</h1>
+      </ImageSlider>
+      <Section></Section>
+    </AppContainter>
   );
 }
 
 export default App;
+
+const AppContainter = styled.div``;
+
+const Section = styled.div``;
+
+const temp = createElement(MapInfoProvider, { children: "Hello" });
