@@ -10,6 +10,7 @@ import {
   MapInfoContext,
   MapInfoProps,
   MapInfoProvider,
+  TileEffectInputProvider,
 } from "./MapInfo";
 
 // const AppProvider = ({ contexts, children }) =>
@@ -48,6 +49,8 @@ const AppProvider = ({ contexts, children }: { contexts: ContextsProvider[]; chi
   );
 };
 
+// ContextAPI Mutl Provider Reverse (because of reduce)
+// => 제일 상위 TileEffectInputProvider > EventInfoProvider > MapInfoProvider
 function App() {
   return (
     <AppContainter>
@@ -56,6 +59,7 @@ function App() {
           //
           MapInfoProvider,
           EventInfoProvider,
+          TileEffectInputProvider,
         ]}
       >
         <MainContainer />

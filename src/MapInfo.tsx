@@ -47,6 +47,28 @@ export const EventInfoProvider = ({ children }: { children: React.ReactNode }): 
   );
 };
 
+export interface TileEffectInputProps {
+  category: string;
+  setCategory: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const TileEffectInputContext = createContext({} as TileEffectInputProps);
+
+export const TileEffectInputProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
+  const [category, setCategory] = useState("");
+
+  return (
+    <TileEffectInputContext.Provider
+      value={{
+        category,
+        setCategory,
+      }}
+    >
+      {children}
+    </TileEffectInputContext.Provider>
+  );
+};
+
 export const MainContainer = () => {
   const props = useContext(MapInfoContext);
   console.log(props);
