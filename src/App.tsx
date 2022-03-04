@@ -63,11 +63,11 @@ function App() {
         ]}
       >
         <MainContainer />
+        <Section />
       </AppProvider>
       <ImageSlider>
         <h1>1</h1>
       </ImageSlider>
-      <Section></Section>
     </AppContainter>
   );
 }
