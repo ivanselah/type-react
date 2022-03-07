@@ -12,7 +12,6 @@ export const MapInfoContext = createContext({} as MapInfoProps);
 
 export const MapInfoProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
   const [isVisible, setIsVisible] = useState(false);
-  console.log(children);
   return (
     <MapInfoContext.Provider
       value={{
@@ -34,7 +33,6 @@ export const EventInfoContext = createContext({} as EventInfoProps);
 
 export const EventInfoProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
   const [count, setCount] = useState(0);
-  console.log(children);
   return (
     <EventInfoContext.Provider
       value={{
@@ -71,7 +69,6 @@ export const TileEffectInputProvider = ({ children }: { children: React.ReactNod
 
 export const MainContainer = () => {
   const props = useContext(MapInfoContext);
-  console.log(props);
   return <h1>.</h1>;
 };
 

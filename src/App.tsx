@@ -1,14 +1,13 @@
-import React, { createElement, FunctionComponent, SetStateAction, useContext, useEffect } from "react";
-import { ReactFragment } from "react";
+import React, { createElement, SetStateAction, useContext, useEffect, useRef } from "react";
 import { ReactNode } from "react";
 import styled from "styled-components";
+import FAIcon, { Hello, Modal, Test1 } from "./FAIcon";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import {
-  EventInfoProps,
   EventInfoProvider,
   ImageSlider,
   MainContainer,
   MapInfoContext,
-  MapInfoProps,
   MapInfoProvider,
   TileEffectInputProvider,
 } from "./MapInfo";
@@ -22,16 +21,6 @@ import {
 //     children,
 //   );
 
-const AppProv = () => {
-  const { isVisible, setIsVisible }: { isVisible: boolean; setIsVisible: React.Dispatch<SetStateAction<boolean>> } =
-    useContext(MapInfoContext);
-
-  useEffect(() => {
-    console.log(isVisible, setIsVisible);
-  }, [isVisible, setIsVisible]);
-
-  return <h1>.</h1>;
-};
 type ContextsProvider = typeof MapInfoProvider | typeof EventInfoProvider;
 
 const AppProvider = ({ contexts, children }: { contexts: ContextsProvider[]; children: ReactNode }) => {
@@ -51,9 +40,17 @@ const AppProvider = ({ contexts, children }: { contexts: ContextsProvider[]; chi
 
 // ContextAPI Mutl Provider Reverse (because of reduce)
 // => 제일 상위 TileEffectInputProvider > EventInfoProvider > MapInfoProvider
+// reduce // =>
 function App() {
+  const btnRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log("useEffect");
+  }, []);
+
   return (
     <AppContainter>
+      <Hello />
       <AppProvider
         contexts={[
           //
@@ -63,6 +60,13 @@ function App() {
         ]}
       >
         <MainContainer />
+        <a href="/">
+          <FAIcon icon={faTrash} size="lg" />
+        </a>
+        <Hello ref={btnRef} />
+        <Modal>
+          <h1>Hello</h1>
+        </Modal>
         <Section />
       </AppProvider>
       <ImageSlider>
@@ -77,5 +81,3 @@ export default App;
 const AppContainter = styled.div``;
 
 const Section = styled.div``;
-
-const temp = createElement(MapInfoProvider, { children: "Hello" });
