@@ -64,9 +64,11 @@ function App() {
           <FAIcon icon={faTrash} size="lg" />
         </a>
         <Hello ref={btnRef} />
-        <Modal>
-          <h1>Hello</h1>
-        </Modal>
+        <div onClick={() => console.log("Hello")}>
+          <Modal>
+            <h1>Hello</h1>
+          </Modal>
+        </div>
         <Section />
       </AppProvider>
       <ImageSlider>
