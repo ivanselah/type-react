@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 
 function Childone() {
   useEffect(() => {
@@ -57,6 +57,8 @@ function AppComponent() {
   const [count, setCount] = useState<string[]>(["1", "2"]);
   const [recipientID, setRecipientID] = useState(1);
   const [number, dispatch] = useReducer(reducer, 0);
+  const btnRef = useRef<HTMLButtonElement>(null); // RefObject <= Read Only
+  const idRef = useRef<number>(0); // MutableRefObject
   /*
    * Hook => should use : use + functionName, coz don't know to use Hook inner.
    */
@@ -66,6 +68,9 @@ function AppComponent() {
     // console.log(isRecipientOnline);
   }, [isRecipientOnline]);
 
+  /*
+   * Hook => useReducer state에 하위 요소들이 많을 때 컴포넌트 밖에서 state를 컨트롤 하고 싶을 때
+   */
   useEffect(() => {
     console.log(number);
   }, [number]);
@@ -74,9 +79,19 @@ function AppComponent() {
     dispatch({ type: "INCRE" });
   };
 
+  /*
+   * Hook => useRef DOM 조작 및 컴포넌트 내에서 변수 관리, 자동 렌더 안됨
+     useRef 로 관리하고 있는 변수는 설정 후 바로 조회 가능
+   */
+  useEffect(() => {
+    console.log(btnRef.current);
+    idRef.current = 10;
+  });
+
   return (
     <div>
       <Childone />
+      {console.log(idRef.current)}
       <h1 color={isRecipientOnline ? "green" : "red"}>Hello</h1>
       <select value={recipientID} onChange={(e) => setRecipientID(Number(e.target.value))}>
         {friendList.map((friend) => (
@@ -85,7 +100,9 @@ function AppComponent() {
           </option>
         ))}
       </select>
-      <button onClick={clickHandleDispatch}>Dispatch</button>
+      <button ref={btnRef} onClick={clickHandleDispatch}>
+        Dispatch
+      </button>
     </div>
   );
 }
