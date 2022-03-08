@@ -53,12 +53,43 @@ function reducer(state: number, action: ActionProps) {
   }
 }
 
+type UsersProps = {
+  id: number;
+  username: string;
+  email: string;
+  active: boolean;
+};
+
+function countActiveUser(users: UsersProps[]) {
+  console.log("사용자 수 세는 중....", users);
+}
+
 function AppComponent() {
-  const [count, setCount] = useState<string[]>(["1", "2"]);
+  const [count, setCount] = useState<number>(0);
   const [recipientID, setRecipientID] = useState(1);
   const [number, dispatch] = useReducer(reducer, 0);
   const btnRef = useRef<HTMLButtonElement>(null); // RefObject <= Read Only
   const idRef = useRef<number>(0); // MutableRefObject
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      username: "velopert",
+      email: "public@gmail.com",
+      active: true,
+    },
+    {
+      id: 2,
+      username: "tester",
+      email: "tester@example.com",
+      active: false,
+    },
+    {
+      id: 3,
+      username: "liz",
+      email: "liz@example.com",
+      active: false,
+    },
+  ]);
   /*
    * Hook => should use : use + functionName, coz don't know to use Hook inner.
    */
@@ -88,6 +119,8 @@ function AppComponent() {
     idRef.current = 10;
   });
 
+  countActiveUser(users);
+
   return (
     <div>
       <Childone />
@@ -103,6 +136,23 @@ function AppComponent() {
       <button ref={btnRef} onClick={clickHandleDispatch}>
         Dispatch
       </button>
+      <ul>
+        {users.map((user, index) => (
+          <li key={user.id} style={{ display: "flex" }}>
+            <div>{user.email}</div>
+            <div style={{ marginLeft: "10px" }}>
+              <button
+                onClick={() => {
+                  setCount((curr) => curr + 1);
+                }}
+              >
+                ON
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <div>활성사용자 수 : </div>
     </div>
   );
 }
