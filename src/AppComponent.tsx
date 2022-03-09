@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
 function Childone() {
   useEffect(() => {
@@ -129,9 +129,12 @@ function AppComponent() {
 
   const activeCount = useMemo(() => countActiveUser(users), [users]);
 
-  const onToggle = (id: number) => {
-    setUsers(users.map((user) => (user.id === id ? { ...user, active: !user.active } : user)));
-  };
+  const onToggle = useCallback((id: number) => {
+    console.log('onToggle');
+    setUsers((users) => {
+      return users.map((user) => (user.id === id ? { ...user, active: !user.active } : user));
+    });
+  }, []);
 
   /*
   * Hook => useEffect, React는 브라우저가 모두 그려질 때까지 
