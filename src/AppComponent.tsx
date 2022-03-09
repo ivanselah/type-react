@@ -1,8 +1,8 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
 function Childone() {
   useEffect(() => {
-    console.log("one");
+    console.log('one');
   });
   return (
     <div>
@@ -13,15 +13,15 @@ function Childone() {
 
 function Childtwo() {
   useEffect(() => {
-    console.log("two");
+    console.log('two');
   });
   return <div></div>;
 }
 
 const friendList = [
-  { id: 1, name: "Phoebe" },
-  { id: 2, name: "Rachel" },
-  { id: 3, name: "Ross" },
+  { id: 1, name: 'Phoebe' },
+  { id: 2, name: 'Rachel' },
+  { id: 3, name: 'Ross' },
 ];
 
 function useFriendStatus(friendID: number) {
@@ -39,14 +39,14 @@ function useFriendStatus(friendID: number) {
 }
 
 type ActionProps = {
-  type: "INCRE" | "DECRE";
+  type: 'INCRE' | 'DECRE';
 };
 
 function reducer(state: number, action: ActionProps) {
   switch (action.type) {
-    case "INCRE":
+    case 'INCRE':
       return state + 1;
-    case "DECRE":
+    case 'DECRE':
       return state - 1;
     default:
       return state;
@@ -61,7 +61,8 @@ type UsersProps = {
 };
 
 function countActiveUser(users: UsersProps[]) {
-  console.log("사용자 수 세는 중....", users);
+  console.log('사용자 수 세는 중....', users);
+  return users.filter((user) => user.active).length;
 }
 
 function AppComponent() {
@@ -73,20 +74,20 @@ function AppComponent() {
   const [users, setUsers] = useState([
     {
       id: 1,
-      username: "velopert",
-      email: "public@gmail.com",
+      username: 'velopert',
+      email: 'public@gmail.com',
       active: true,
     },
     {
       id: 2,
-      username: "tester",
-      email: "tester@example.com",
+      username: 'tester',
+      email: 'tester@example.com',
       active: false,
     },
     {
       id: 3,
-      username: "liz",
-      email: "liz@example.com",
+      username: 'liz',
+      email: 'liz@example.com',
       active: false,
     },
   ]);
@@ -107,7 +108,7 @@ function AppComponent() {
   }, [number]);
 
   const clickHandleDispatch = () => {
-    dispatch({ type: "INCRE" });
+    dispatch({ type: 'INCRE' });
   };
 
   /*
@@ -115,17 +116,27 @@ function AppComponent() {
      useRef 로 관리하고 있는 변수는 설정 후 바로 조회 가능
    */
   useEffect(() => {
-    console.log(btnRef.current);
     idRef.current = 10;
   });
 
-  countActiveUser(users);
+  /* 
+   * Hook => useMemo, 다른 state에 변화로 인해 불필요하게 계속 렌더됨
+    Memo 는 'memoized' 이전에 계산 한 값을 재사용한다라는 의미
+  */
+
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+
+  const activeCount = useMemo(() => countActiveUser(users), [users]);
+
+  const onToggle = (id: number) => {
+    setUsers(users.map((user) => (user.id === id ? { ...user, active: !user.active } : user)));
+  };
 
   return (
     <div>
       <Childone />
-      {console.log(idRef.current)}
-      <h1 color={isRecipientOnline ? "green" : "red"}>Hello</h1>
+      <h1 color={isRecipientOnline ? 'green' : 'red'}>Hello</h1>
       <select value={recipientID} onChange={(e) => setRecipientID(Number(e.target.value))}>
         {friendList.map((friend) => (
           <option key={friend.id} value={friend.id}>
@@ -133,26 +144,15 @@ function AppComponent() {
           </option>
         ))}
       </select>
+      <form>
+        <input value={userName} type="text" placeholder="아이디" onChange={(e) => setUserName(e.currentTarget.value)} />
+        <input value={userEmail} type="text" placeholder="이메일" onChange={(e) => setUserEmail(e.currentTarget.value)} />
+      </form>
+      <UserList users={users} onToggle={onToggle} />
       <button ref={btnRef} onClick={clickHandleDispatch}>
         Dispatch
       </button>
-      <ul>
-        {users.map((user, index) => (
-          <li key={user.id} style={{ display: "flex" }}>
-            <div>{user.email}</div>
-            <div style={{ marginLeft: "10px" }}>
-              <button
-                onClick={() => {
-                  setCount((curr) => curr + 1);
-                }}
-              >
-                ON
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div>활성사용자 수 : </div>
+      <div>활성사용자 수 : {activeCount}</div>
     </div>
   );
 }
@@ -161,3 +161,24 @@ function AppComponent() {
 // 부모컴포넌트는 자식컴포넌트들이 렌더링이 다 될때까지 실행되지 않음.
 
 export default AppComponent;
+
+function UserList({ users, onToggle }: { users: UsersProps[]; onToggle: (id: number) => void }) {
+  return (
+    <ul>
+      {users.map((user, index) => (
+        <li key={user.id} style={{ display: 'flex' }}>
+          <div>{user.email}</div>
+          <div style={{ marginLeft: '10px' }}>
+            <button
+              onClick={() => {
+                onToggle(user.id);
+              }}
+            >
+              {user.active ? '비활성' : '활성'}
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
