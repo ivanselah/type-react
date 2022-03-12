@@ -7,9 +7,11 @@ import API from './lecture/API';
 import Main from './lecture/Main';
 import PromiseT from './lecture/PromisT';
 import AppCom from './project-1/AppCom';
+import GlobalStyle from './styles';
 
 ReactDOM.render(
   <React.StrictMode>
+    <GlobalStyle />
     <AppCom />
   </React.StrictMode>,
   document.getElementById('root')

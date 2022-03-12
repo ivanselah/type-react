@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 
-type StateProps = {
+export type StateProps = {
   author: string;
   content: string;
   emotion: number;
 };
 
-function DiaryEditor() {
+function DiaryEditor({ bringData }: { bringData: (data: StateProps) => void }) {
   const [state, setState] = useState<StateProps>({
     author: '',
     content: '',
     emotion: 1,
   });
+  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const onChangeHandle = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const {
@@ -25,17 +27,37 @@ function DiaryEditor() {
   };
 
   const onSubmit = () => {
-    alert('저장완료');
+    const input = inputRef.current?.value;
+    const textarea = textareaRef.current?.value;
+    if (!input || !textarea) {
+      alert('입력 값이 없습니다.');
+      return;
+    }
+    if (input.length < 5) {
+      alert('5글자 이상 입력해주세요.');
+      inputRef.current.focus();
+    } else if (textarea.length < 10) {
+      alert('10글자 이상 입력해주세요.');
+      textareaRef.current.focus();
+    } else {
+      bringData(state);
+      alert('저장완료');
+      setState({
+        author: '',
+        content: '',
+        emotion: 1,
+      });
+    }
   };
 
   return (
     <DiaryEditorContainer>
       <h2>오늘의일기</h2>
       <div>
-        <input name="author" value={state.author} onChange={onChangeHandle} />
+        <input ref={inputRef} name="author" value={state.author} onChange={onChangeHandle} />
       </div>
       <div>
-        <textarea name="content" value={state.content} onChange={onChangeHandle} />
+        <textarea ref={textareaRef} name="content" value={state.content} onChange={onChangeHandle} />
       </div>
       <EmotionContainer>
         <div>감정점수 :</div>
