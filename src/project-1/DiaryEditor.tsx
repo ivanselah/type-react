@@ -1,15 +1,24 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { StateAddDateProps } from './AppCom';
 
 export type StateProps = {
-  author: string;
+  title: string;
   content: string;
   emotion: number;
 };
 
-function DiaryEditor({ bringData }: { bringData: (data: StateProps) => void }) {
+function DiaryEditor({
+  bringData,
+  modifyModalVisible,
+  targetData,
+}: {
+  bringData?: (data: StateProps) => void;
+  modifyModalVisible: boolean;
+  targetData: StateAddDateProps;
+}) {
   const [state, setState] = useState<StateProps>({
-    author: '',
+    title: '',
     content: '',
     emotion: 1,
   });
@@ -26,6 +35,16 @@ function DiaryEditor({ bringData }: { bringData: (data: StateProps) => void }) {
     });
   };
 
+  useEffect(() => {
+    if (modifyModalVisible) {
+      setState({
+        title: targetData.title,
+        content: targetData.content,
+        emotion: targetData.emotion,
+      });
+    }
+  }, [modifyModalVisible, targetData]);
+
   const onSubmit = () => {
     const input = inputRef.current?.value;
     const textarea = textareaRef.current?.value;
@@ -40,10 +59,10 @@ function DiaryEditor({ bringData }: { bringData: (data: StateProps) => void }) {
       alert('10글자 이상 입력해주세요.');
       textareaRef.current.focus();
     } else {
-      bringData(state);
+      if (bringData) bringData(state);
       alert('저장완료');
       setState({
-        author: '',
+        title: '',
         content: '',
         emotion: 1,
       });
@@ -54,7 +73,7 @@ function DiaryEditor({ bringData }: { bringData: (data: StateProps) => void }) {
     <DiaryEditorContainer>
       <h2>오늘의일기</h2>
       <div>
-        <input ref={inputRef} name="author" value={state.author} onChange={onChangeHandle} />
+        <input ref={inputRef} name="title" value={state.title} onChange={onChangeHandle} />
       </div>
       <div>
         <textarea ref={textareaRef} name="content" value={state.content} onChange={onChangeHandle} />
@@ -70,7 +89,7 @@ function DiaryEditor({ bringData }: { bringData: (data: StateProps) => void }) {
         </select>
       </EmotionContainer>
       <div>
-        <button onClick={onSubmit}>저장하기</button>
+        <button onClick={onSubmit}>{modifyModalVisible ? '수정하기' : '저장하기'}</button>
       </div>
     </DiaryEditorContainer>
   );

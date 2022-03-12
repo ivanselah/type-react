@@ -1,24 +1,30 @@
 import styled from 'styled-components';
 import { StateAddDateProps } from './AppCom';
+import { FuncType } from './DiaryList';
 
-function DiaryItem({ data, deleteData }: { data: StateAddDateProps; deleteData: (id: StateAddDateProps['id']) => void }) {
+function DiaryItem({ data, deleteData, modifyData }: { data: StateAddDateProps; deleteData: FuncType; modifyData: FuncType }) {
   return (
     <DiaryItemContainer>
-      <div
-        className="diary-item__close"
-        onClick={() => {
-          if (window.confirm('정말로 삭제하시겠습니까?')) deleteData(data.id);
-        }}
-      >
-        &times;
-      </div>
       <li>
-        <p className="diary-item__auther">작성자 : {data.author}</p>
+        <p className="diary-item__title">제목 : {data.title}</p>
         <p className="diary-item__content">내용 : {data.content}</p>
         <p className="diary-item__date">작성 시간 : {new Date(data.created_date).toLocaleString('ko-kr')}</p>
         <LineBorder />
         <p>감정점수 : {data.emotion}</p>
       </li>
+      <div>
+        <button
+          className="diary-item__delete"
+          onClick={() => {
+            if (window.confirm('정말로 삭제하시겠습니까?')) deleteData(data.id);
+          }}
+        >
+          삭제
+        </button>
+        <button className="diary-item__modify" onClick={() => modifyData(data.id)}>
+          수정
+        </button>
+      </div>
     </DiaryItemContainer>
   );
 }
@@ -36,13 +42,17 @@ const DiaryItemContainer = styled.div`
     margin-bottom: 5px;
   }
 
-  .diary-item__close {
-    text-align: end;
-    font-size: 20px;
+  .diary-item__delete,
+  .diary-item__modify {
+    width: 50px;
+    padding: 5px;
+    font-size: 15px;
     cursor: pointer;
+    color: #ffffff;
+    margin-right: 5px;
   }
 
-  .diary-item__auther {
+  .diary-item__title {
     color: tomato;
   }
 

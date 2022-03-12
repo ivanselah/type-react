@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import { StateAddDateProps } from './AppCom';
 import DiaryItem from './DiaryItem';
 
-function DiaryList({ dataList, deleteData }: { dataList: StateAddDateProps[]; deleteData: (id: StateAddDateProps['id']) => void }) {
+export type FuncType = (id: StateAddDateProps['id']) => void;
+
+function DiaryList({ dataList, deleteData, modifyData }: { dataList: StateAddDateProps[]; deleteData: FuncType; modifyData: FuncType }) {
   return (
     <DiaryListContainer>
       <h2 className="diary-list__title">코로나 격리 일기</h2>
@@ -10,7 +12,7 @@ function DiaryList({ dataList, deleteData }: { dataList: StateAddDateProps[]; de
       <br />
       <ul>
         {dataList.map((data) => (
-          <DiaryItem key={data.id} data={data} deleteData={deleteData} />
+          <DiaryItem key={data.id} data={data} deleteData={deleteData} modifyData={modifyData} />
         ))}
       </ul>
     </DiaryListContainer>
