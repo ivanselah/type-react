@@ -238,7 +238,7 @@ function UserList({ users, onToggle }: { users: UsersProps[]; onToggle: (id: num
 */
 
 // => 특정 props를 비교해서 렌더링을 컨트롤하는 것은 이후 버그를 발생시킬 수 있으므로 신중하게 한다.
-// onToggle에서 최신 users 배열을 참조하지 않으므로 심각한 오류가 발생 할 수 있습니다.
+// 함수업데이트를 사용하지 않을 시 onToggle에서 최신 users 배열을 참조하지 않으므로 심각한 오류가 발생 할 수 있습니다.
 // export const MemoUserList = React.memo(UserList, (preProps, nextProps) => preProps.users === nextProps.users);
 
 export const MemoUserList = React.memo(UserList);
