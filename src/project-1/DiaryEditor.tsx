@@ -1,6 +1,6 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { StateAddDateProps } from './AppCom';
+import { DiaryStateContext } from './AppCom';
 
 export type StateProps = {
   title: string;
@@ -8,15 +8,7 @@ export type StateProps = {
   emotion: number;
 };
 
-function DiaryEditor({
-  bringData,
-  modifyModalVisible,
-  targetData,
-}: {
-  bringData?: (data: StateProps) => void;
-  modifyModalVisible: boolean;
-  targetData: StateAddDateProps;
-}) {
+function DiaryEditor() {
   const [state, setState] = useState<StateProps>({
     title: '',
     content: '',
@@ -24,6 +16,7 @@ function DiaryEditor({
   });
   const inputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { bringData, modifyModalVisible, targetData } = useContext(DiaryStateContext);
 
   const onChangeHandle = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const {
@@ -36,7 +29,7 @@ function DiaryEditor({
   };
 
   useEffect(() => {
-    if (modifyModalVisible) {
+    if (modifyModalVisible && targetData) {
       setState({
         title: targetData.title,
         content: targetData.content,

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import DiaryEditor, { StateProps } from './DiaryEditor';
 import DiaryList from './DiaryList';
@@ -57,9 +57,21 @@ function dataListReducer(state: StateAddDateProps[], action: DataListAction): St
       return state;
   }
 }
+interface IDiaryDataProps {
+  dataList: StateAddDateProps[];
+}
+interface IDiaryStateProps {
+  deleteData: (dataId: StateAddDateProps['id']) => void;
+  modifyData: (data: StateAddDateProps) => void;
+  bringData: (data: StateProps) => void;
+  modifyModalVisible: boolean;
+  targetData?: StateAddDateProps;
+}
+
+export const DiaryDataContext = createContext({} as IDiaryDataProps);
+export const DiaryStateContext = createContext({} as IDiaryStateProps);
 
 function AppCom() {
-  // const [dataList, setDataList] = useState<StateAddDateProps[]>([]);
   const [dataList, dataListDispatch] = useReducer(dataListReducer, []);
   const [modifyModalVisible, setModifyModalVisible] = useState(false);
   const [targetData, setTargetData] = useState<StateAddDateProps>();
@@ -123,6 +135,11 @@ function AppCom() {
     modifyVisibleToggle();
   }, []);
 
+  // useMemo로 재성성안되게 묶어서 보내줌
+  const useStateProps = useMemo(() => {
+    return { deleteData, modifyData, bringData, modifyModalVisible, targetData };
+  }, [deleteData, modifyData, bringData, modifyModalVisible, targetData]);
+
   // const getDiaryAnalysis = useMemo(() => {
   //   const goodCount = dataList.filter((data) => data.emotion >= 3).length;
   //   const badCount = dataList.length - goodCount;
@@ -132,15 +149,26 @@ function AppCom() {
 
   // const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
 
+  /*
+   *  ❌  => <DiaryStateContext.Provider value={{ dataList, deleteData, modifyData, bringData, modifyModalVisible, targetData }}>
+                                                     ↑ 이렇게 모두 전달하게 되면 안됨
+   * 💡 Provider 도 Component 이므로 props 변경(state)되면 재생성된다. 그 아래 모든 컴포넌트가 강제로 재생성 된다.
+      즉, dataList state가 변경될때마다 리렌더링 발생한다. 그러면 최적화 했던 것들이 전부 풀리게 된다.
+      ⭐️ 해결책 => Context를 중첩해서 만들어야 한다. useMemo로 재생성안되게 묶어서 보냄
+   */
   return (
     <div>
       <OptimizeTest />
-      <DiaryEditor bringData={bringData} modifyModalVisible={modifyModalVisible} targetData={targetData!} />
-      {/* <div>{dataList.length}</div>
+      <DiaryDataContext.Provider value={{ dataList }}>
+        <DiaryStateContext.Provider value={useStateProps}>
+          <DiaryEditor />
+          {/* <div>{dataList.length}</div>
       <div>기분 좋은 일기 개수 : {goodCount}</div>
       <div>기분 나쁜 일기 개수 : {badCount}</div>
       <div>기분 좋은 일기 비율 : {goodRatio}%</div> */}
-      <DiaryList dataList={dataList} deleteData={deleteData} modifyData={modifyData} />
+          <DiaryList />
+        </DiaryStateContext.Provider>
+      </DiaryDataContext.Provider>
     </div>
   );
 }

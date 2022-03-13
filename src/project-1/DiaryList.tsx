@@ -1,11 +1,16 @@
+import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { StateAddDateProps } from './AppCom';
+import { DiaryDataContext, StateAddDateProps } from './AppCom';
 import DiaryItem from './DiaryItem';
 
 export type FuncType = (id: StateAddDateProps['id']) => void;
 export type DataFuncType = (data: StateAddDateProps) => void;
 
-function DiaryList({ dataList, deleteData, modifyData }: { dataList: StateAddDateProps[]; deleteData: FuncType; modifyData: DataFuncType }) {
+function DiaryList() {
+  const { dataList } = useContext(DiaryDataContext);
+  useEffect(() => {
+    console.log('DiaryList Update');
+  });
   return (
     <DiaryListContainer>
       <h2 className="diary-list__title">코로나 격리 일기</h2>
@@ -13,7 +18,7 @@ function DiaryList({ dataList, deleteData, modifyData }: { dataList: StateAddDat
       <br />
       <ul>
         {dataList.map((data) => (
-          <DiaryItem key={data.id} data={data} deleteData={deleteData} modifyData={modifyData} />
+          <DiaryItem key={data.id} data={data} />
         ))}
       </ul>
     </DiaryListContainer>

@@ -1,11 +1,12 @@
-import { memo, useEffect } from 'react';
+import { memo, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { StateAddDateProps } from './AppCom';
-import { DataFuncType, FuncType } from './DiaryList';
+import { DiaryStateContext, StateAddDateProps } from './AppCom';
 
-function DiaryItem({ data, deleteData, modifyData }: { data: StateAddDateProps; deleteData: FuncType; modifyData: DataFuncType }) {
+function DiaryItem({ data }: { data: StateAddDateProps }) {
+  const { deleteData, modifyData } = useContext(DiaryStateContext);
+
   useEffect(() => {
-    console.table(data.emotion);
+    console.log('DiaryItem Update');
   });
 
   return (
