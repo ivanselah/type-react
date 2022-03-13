@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import React, { Dispatch, memo, SetStateAction, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
 function Childone() {
   useEffect(() => {
@@ -121,13 +121,16 @@ function AppComponent() {
 
   /* 
    * Hook => useMemo, 다른 state에 변화로 인해 불필요하게 계속 렌더됨
-    Memo 는 'memoized' 이전에 계산 한 값을 재사용한다라는 의미
+    Memo 는 'memoized' 이전에 계산 한 값을 재사용한다라는 의미 (값!!!!!을 기억!!!!)
+    ⭐️ 중요 : useMemo 안에 callback이 리턴하는 값을 리턴하므로 함수가 아니다.
   */
 
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
   const activeCount = useMemo(() => countActiveUser(users), [users]);
+
+  // const hello = activeCount(); <= ❌,  const hello = activeCount <= ⭕️
 
   const onToggle = useCallback((id: number) => {
     console.log('onToggle');
@@ -211,14 +214,17 @@ function UserList({ users, onToggle }: { users: UsersProps[]; onToggle: (id: num
   );
 }
 
+// 💡 고차컴포넌트란 => 컴포넌트안에 컴포넌트를 넣으면 또다른 컴포넌트를 준다.
+
 // Hook => 특정 값을 비교해서 변경이 없다면(같다면) 리 렌더 하지 않음
 /*
- * 컴퍼넌트가 React.memo()로 래핑 될 때, React는 컴퍼넌트를 렌더링하고 결과를 메모이징(Memoizing)한다. 
-   그리고 다음 렌더링이 일어날 때 props가 같다면, React는 메모이징(Memoizing)된 내용을 재사용한다.(가상DOM확인안함)
+ * 컴퍼넌트가 React.memo() === memo 로 래핑 될 때, 
+    React는 컴퍼넌트를 렌더링하고 결과를 메모이징(Memoizing)한다. 
+   그리고 다음 렌더링이 일어날 때 props가 같다면(전달된 props가 변하지 않는다면), React는 메모이징(Memoizing)된 내용을 재사용한다.(가상DOM확인안함) 즉 => 컴포넌트 재사용
    shallow 비교함
  */
 
-/* function MovieViewsRealtime() {
+/* function MovieViewsRealtime() { 
   title, 
   releaseDate
   views
@@ -239,9 +245,47 @@ function UserList({ users, onToggle }: { users: UsersProps[]; onToggle: (id: num
 
 // => 특정 props를 비교해서 렌더링을 컨트롤하는 것은 이후 버그를 발생시킬 수 있으므로 신중하게 한다.
 // 함수업데이트를 사용하지 않을 시 onToggle에서 최신 users 배열을 참조하지 않으므로 심각한 오류가 발생 할 수 있습니다.
-// export const MemoUserList = React.memo(UserList, (preProps, nextProps) => preProps.users === nextProps.users);
+// export const MemoUserList = React.memo(UserList, areEqual);
+const MemoUserList = React.memo(UserList);
 
-export const MemoUserList = React.memo(UserList);
+// => memo 로 감쌌지만 리렌더링이 발생한다.
+// 이유는 얇은 비교 때문이다. 객체 안에 count 의 값은 같을 수 있으나
+// obj의 주소값이 다르므로 변경됬다고 판단하여 리렌더링이 발생한다.
+// 이럴 땐 memo 두번째 인자로 판별하는 callback 함수를 전달한다. (true 같음, false 변경됨)
+
+const areEqual = (preProps: { obj: { count: number } }, nextProps: { obj: { count: number } }) => {
+  if (preProps.obj.count === nextProps.obj.count) {
+    return true;
+  }
+  return false;
+};
+const ConterB = memo(({ obj }: { obj: { count: number } }) => {
+  useEffect(() => {
+    console.log('ConterB Update');
+  });
+  return <div>{obj.count}</div>;
+});
+
+const MemoCounterB = memo(ConterB, areEqual);
+
+function MemoTest() {
+  const [obj, setObj] = useState({
+    count: 1,
+  });
+  return (
+    <div>
+      <h2>{obj.count}</h2>
+      <MemoCounterB obj={obj} />
+      <button
+        onClick={() => {
+          setObj({
+            count: obj.count,
+          });
+        }}
+      ></button>
+    </div>
+  );
+}
 
 function CreateUser({
   userName,

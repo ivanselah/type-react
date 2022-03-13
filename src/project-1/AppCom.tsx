@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import DiaryEditor, { StateProps } from './DiaryEditor';
 import DiaryList from './DiaryList';
+import OptimizeTest from './OptimizeTest';
 
 export type StateAddDateProps = StateProps & {
   id: string;
@@ -15,8 +16,6 @@ type InitSateProps = {
   email: string;
   body: string;
 };
-
-// https://jsonplaceholder.typicode.com/comments
 
 function AppCom() {
   const [dataList, setDataList] = useState<StateAddDateProps[]>([]);
@@ -35,19 +34,20 @@ function AppCom() {
     return newData;
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      let initDataList: StateAddDateProps[] = [];
-      const response = await (await fetch('https://jsonplaceholder.typicode.com/comments')).json();
-      const cutData: InitSateProps[] = response.slice(0, 20);
-      cutData.forEach((data) => {
-        const randomEmotion = Math.floor(Math.random() * 5) + 1;
-        initDataList.push(createNewObject({ title: data.email, content: data.body, emotion: randomEmotion }));
-      });
-      setDataList(initDataList);
-    };
-    getData();
+  const getData = useCallback(async () => {
+    let initDataList: StateAddDateProps[] = [];
+    const response = await (await fetch('https://jsonplaceholder.typicode.com/comments')).json();
+    const cutData: InitSateProps[] = response.slice(0, 20);
+    cutData.forEach((data) => {
+      const randomEmotion = Math.floor(Math.random() * 5) + 1;
+      initDataList.push(createNewObject({ title: data.email, content: data.body, emotion: randomEmotion }));
+    });
+    setDataList(initDataList);
   }, []);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   const bringData = (data: StateProps) => {
     const newData = createNewObject(data);
@@ -88,9 +88,23 @@ function AppCom() {
     modifyVisibleToggle();
   };
 
+  const getDiaryAnalysis = useMemo(() => {
+    const goodCount = dataList.filter((data) => data.emotion >= 3).length;
+    const badCount = dataList.length - goodCount;
+    const goodRatio = (goodCount / dataList.length) * 100;
+    return { goodCount, badCount, goodRatio };
+  }, [dataList]);
+
+  const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
+
   return (
     <div>
+      <OptimizeTest />
       <DiaryEditor bringData={bringData} modifyModalVisible={modifyModalVisible} targetData={targetData!} />
+      <div>{dataList.length}</div>
+      <div>기분 좋은 일기 개수 : {goodCount}</div>
+      <div>기분 나쁜 일기 개수 : {badCount}</div>
+      <div>기분 좋은 일기 비율 : {goodRatio}%</div>
       <DiaryList dataList={dataList} deleteData={deleteData} modifyData={modifyData} />
     </div>
   );
