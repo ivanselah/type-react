@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { StateAddDateProps } from './AppCom';
 
@@ -44,6 +44,10 @@ function DiaryEditor({
       });
     }
   }, [modifyModalVisible, targetData]);
+
+  useEffect(() => {
+    console.log('Diary Editor 렌더');
+  });
 
   const onSubmit = () => {
     const input = inputRef.current?.value;
@@ -95,7 +99,7 @@ function DiaryEditor({
   );
 }
 
-export default DiaryEditor;
+export default memo(DiaryEditor);
 
 const DiaryEditorContainer = styled.div`
   border: 1px solid gray;

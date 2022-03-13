@@ -3,8 +3,9 @@ import { StateAddDateProps } from './AppCom';
 import DiaryItem from './DiaryItem';
 
 export type FuncType = (id: StateAddDateProps['id']) => void;
+export type DataFuncType = (data: StateAddDateProps) => void;
 
-function DiaryList({ dataList, deleteData, modifyData }: { dataList: StateAddDateProps[]; deleteData: FuncType; modifyData: FuncType }) {
+function DiaryList({ dataList, deleteData, modifyData }: { dataList: StateAddDateProps[]; deleteData: FuncType; modifyData: DataFuncType }) {
   return (
     <DiaryListContainer>
       <h2 className="diary-list__title">코로나 격리 일기</h2>

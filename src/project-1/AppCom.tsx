@@ -49,44 +49,51 @@ function AppCom() {
     getData();
   }, [getData]);
 
-  const bringData = (data: StateProps) => {
-    const newData = createNewObject(data);
-    if (modifyModalVisible) {
-      setDataList((currList) => {
-        return currList.map((item) => {
-          if (item.id === targetId.current) {
-            return {
-              ...item,
-              title: data.title,
-              content: data.content,
-              emotion: data.emotion,
-              created_date: new Date().getTime(),
-            };
-          } else {
-            return item;
-          }
+  /*
+   * useCallback => 으로 감싸고 디펜던시에 dataList를 넣고 삭제버튼을 눌러도 재 랜더된다.
+     왜냐하면 dataList가 변경되기 때문에 만약 디펜던시에 dataList를 빼고 한다면 함수형 업데이트를 활용해서 
+     함수가 다시 생성되지 않아도 최신 dataList를 받아 업데이트 하도록한다.
+   */
+  const bringData = useCallback(
+    (data: StateProps) => {
+      const newData = createNewObject(data);
+      if (modifyModalVisible) {
+        setDataList((currList) => {
+          return currList.map((item) => {
+            if (item.id === targetId.current) {
+              return {
+                ...item,
+                title: data.title,
+                content: data.content,
+                emotion: data.emotion,
+                created_date: new Date().getTime(),
+              };
+            } else {
+              return item;
+            }
+          });
         });
-      });
-      modifyVisibleToggle();
-    } else {
-      setDataList([newData, ...dataList]);
-    }
-  };
+        modifyVisibleToggle();
+      } else {
+        setDataList((data) => [newData, ...data]);
+      }
+    },
+    [modifyModalVisible]
+  );
 
-  const deleteData = (dataId: StateAddDateProps['id']) => {
+  const deleteData = useCallback((dataId: StateAddDateProps['id']) => {
     setDataList((currList) => currList.filter((data) => data.id !== dataId));
-  };
+  }, []);
 
   const modifyVisibleToggle = () => {
     setModifyModalVisible((visible) => !visible);
   };
 
-  const modifyData = (dataId: StateAddDateProps['id']) => {
-    const targetData = dataList.find((data) => data.id === dataId);
-    targetId.current = dataId;
-    setTargetData(targetData);
+  const modifyData = useCallback((data: StateAddDateProps) => {
+    targetId.current = data.id;
+    setTargetData(data);
     modifyVisibleToggle();
-  };
+  }, []);
 
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = dataList.filter((data) => data.emotion >= 3).length;

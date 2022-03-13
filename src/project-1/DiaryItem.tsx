@@ -1,8 +1,13 @@
+import { memo, useEffect } from 'react';
 import styled from 'styled-components';
 import { StateAddDateProps } from './AppCom';
-import { FuncType } from './DiaryList';
+import { DataFuncType, FuncType } from './DiaryList';
 
-function DiaryItem({ data, deleteData, modifyData }: { data: StateAddDateProps; deleteData: FuncType; modifyData: FuncType }) {
+function DiaryItem({ data, deleteData, modifyData }: { data: StateAddDateProps; deleteData: FuncType; modifyData: DataFuncType }) {
+  useEffect(() => {
+    console.table(data.emotion);
+  });
+
   return (
     <DiaryItemContainer>
       <li>
@@ -21,7 +26,7 @@ function DiaryItem({ data, deleteData, modifyData }: { data: StateAddDateProps; 
         >
           삭제
         </button>
-        <button className="diary-item__modify" onClick={() => modifyData(data.id)}>
+        <button className="diary-item__modify" onClick={() => modifyData(data)}>
           수정
         </button>
       </div>
@@ -29,7 +34,7 @@ function DiaryItem({ data, deleteData, modifyData }: { data: StateAddDateProps; 
   );
 }
 
-export default DiaryItem;
+export default memo(DiaryItem);
 
 const DiaryItemContainer = styled.div`
   background-color: #ffffff;
