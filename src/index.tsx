@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { RecoilRoot } from 'recoil';
 import App from './App';
 import AppComponent from './AppComponent';
 import HookTest from './hookTest';
@@ -13,7 +14,9 @@ import GlobalStyle from './styles';
 ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
-    <AppCom />
+    <RecoilRoot>
+      <AppCom />
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root')
 );
