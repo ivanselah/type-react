@@ -3,6 +3,7 @@ const TOGGLE_TODO = "todos/TOGGLE_TODO";
 
 let nextId = 1;
 
+// Action 함수
 export const addTodo = (text: string) => ({
   type: ADD_TODO,
   todo: {
@@ -18,7 +19,7 @@ export const toggleTodo = (id: number) => ({
 
 const initialState = [
   {
-    id: 1,
+    id: 0,
     text: "",
     done: false,
   },
@@ -28,7 +29,7 @@ export type TodosProps = { id: number; text: string; done: boolean };
 
 type ActionProps = {
   type: "todos/ADD_TODO" | "todos/TOGGLE_TODO";
-  todo: [];
+  todo: TodosProps;
   id: number;
 };
 

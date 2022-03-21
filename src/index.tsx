@@ -14,10 +14,10 @@ import { createStore } from "redux";
 import MainComponent from "./project01/MainComponent";
 import rootReducer from "./project01/modules/rootReducer";
 import { Provider } from "react-redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import TodosContainer from "./project01/containers/TodosContainer";
 
-const store = createStore(rootReducer);
-
-console.log(store.getState());
+const store = createStore(rootReducer, composeWithDevTools());
 
 ReactDOM.render(
   <React.StrictMode>
@@ -25,6 +25,7 @@ ReactDOM.render(
     <RecoilRoot>
       <Provider store={store}>
         <MainComponent />
+        <TodosContainer />
       </Provider>
     </RecoilRoot>
   </React.StrictMode>,

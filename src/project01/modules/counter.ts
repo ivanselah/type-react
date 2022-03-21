@@ -17,7 +17,6 @@ const initialState = { counter: 0, diff: 1 };
 export default function counter(state: CounterProps = initialState, action: ActionProps) {
   switch (action.type) {
     case INCREASE:
-      console.log("T");
       return {
         ...state,
         counter: state.counter + 1,
