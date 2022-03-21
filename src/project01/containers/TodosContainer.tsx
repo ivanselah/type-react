@@ -7,11 +7,12 @@ import { addTodo, toggleTodo } from "../modules/todos";
 function TodosContainer() {
   const dispatch = useDispatch();
 
-  const todos = useSelector((state: I_AllStateProps) => state.todos);
   const onCreate = (text: string) => dispatch(addTodo(text));
   const onToggle = useCallback((id: number) => dispatch(toggleTodo(id)), [dispatch]);
 
-  return <Todos onCreate={onCreate} todos={todos} onToggle={onToggle} />;
+  const todos = useSelector((state: I_AllStateProps) => state.todos);
+
+  return <Todos todos={todos} onCreate={onCreate} onToggle={onToggle} />;
 }
 
 export default TodosContainer;

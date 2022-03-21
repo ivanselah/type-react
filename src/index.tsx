@@ -11,7 +11,7 @@ import LifeCycle from "./Lifecycle";
 import AppCom from "./other/project-1/AppCom";
 import GlobalStyle from "./styles";
 import { createStore } from "redux";
-import MainComponent from "./project01/MainComponent";
+import MainContainer from "./project01/containers/MainContainer";
 import rootReducer from "./project01/modules/rootReducer";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
@@ -24,7 +24,7 @@ ReactDOM.render(
     <GlobalStyle />
     <RecoilRoot>
       <Provider store={store}>
-        <MainComponent />
+        <MainContainer />
         <TodosContainer />
       </Provider>
     </RecoilRoot>

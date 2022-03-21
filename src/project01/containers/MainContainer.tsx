@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
-import Counter from "./components/Counter";
-import { decrease, increase } from "./modules/counter";
-import { I_AllStateProps } from "./modules/rootReducer";
+import Counter from "../components/Counter";
+import { decrease, increase } from "../modules/counter";
+import { I_AllStateProps } from "../modules/rootReducer";
 
 /* 
 ** 컨테이너 컴포넌트
@@ -9,7 +9,7 @@ import { I_AllStateProps } from "./modules/rootReducer";
    HTML (JSX) 태그들을 사용하지 않고 다른 프리젠테이셔널 컴포넌트를 불러와서 사용
 */
 
-function MainComponent() {
+function MainContainer() {
   const dispatch = useDispatch();
   const { number, diff } = useSelector((state: I_AllStateProps) => ({
     number: state.counter.counter,
@@ -33,4 +33,4 @@ function MainComponent() {
   );
 }
 
-export default MainComponent;
+export default MainContainer;
