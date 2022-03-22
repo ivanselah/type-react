@@ -1,10 +1,12 @@
 import { combineReducers } from "redux";
 import counter, { CounterProps } from "./counter";
 import todos, { TodosProps } from "./todos";
+import placeholder, { PlaceholderProps } from "./pleaceholder";
 
 export interface I_AllStateProps {
   counter: CounterProps;
   todos: Array<TodosProps>;
+  placeholder: PlaceholderProps;
 }
 
 /*
@@ -22,6 +24,7 @@ export interface I_AllStateProps {
 const rootReducer = combineReducers({
   counter,
   todos,
+  placeholder,
 });
 
 export default rootReducer;

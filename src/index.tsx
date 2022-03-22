@@ -10,23 +10,42 @@ import PromiseT from "./other/lecture/PromisT";
 import LifeCycle from "./Lifecycle";
 import AppCom from "./other/project-1/AppCom";
 import GlobalStyle from "./styles";
-import { createStore } from "redux";
-import MainContainer from "./project01/containers/MainContainer";
-import rootReducer from "./project01/modules/rootReducer";
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import CounterContainer from "./project01/containers/CounterContainer";
+import rootReducer from "./project01/modules/rootReducer";
 import TodosContainer from "./project01/containers/TodosContainer";
+import PlaceholderContainer from "./project01/containers/PlaceholderContainer";
+import logger from "redux-logger";
+import thunk from "redux-thunk";
+import { Home, SectionOne } from "./project01/home";
 
-const store = createStore(rootReducer, composeWithDevTools());
+const MIDDLEWARE = [thunk, logger];
+
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...MIDDLEWARE)));
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
     <RecoilRoot>
-      <Provider store={store}>
-        <MainContainer />
-        <TodosContainer />
-      </Provider>
+      <BrowserRouter>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            {/* <CounterContainer />
+            <TodosContainer /> */}
+            <PlaceholderContainer />
+            <Routes>
+              <Route path="/" element={<SectionOne />} />
+              <Route path="/:id" element={<Home />} />
+            </Routes>
+          </QueryClientProvider>
+        </Provider>
+      </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")
