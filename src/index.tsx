@@ -17,17 +17,22 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import CounterContainer from "./project01/containers/CounterContainer";
-import rootReducer from "./project01/modules/rootReducer";
+import rootReducer, { rootSaga } from "./project01/modules/rootReducer";
 import TodosContainer from "./project01/containers/TodosContainer";
 import PlaceholderContainer from "./project01/containers/PlaceholderContainer";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga";
 import { Home, SectionOne } from "./project01/home";
+import CounterSagaContainer from "./project01/containers/CounterSagaContainer";
 
-const MIDDLEWARE = [thunk, logger];
+const sagaMiddleware = createSagaMiddleware();
+
+const MIDDLEWARE = [thunk, sagaMiddleware, logger];
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...MIDDLEWARE)));
 const queryClient = new QueryClient();
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <React.StrictMode>
@@ -38,6 +43,7 @@ ReactDOM.render(
           <QueryClientProvider client={queryClient}>
             {/* <CounterContainer />
             <TodosContainer /> */}
+            <CounterSagaContainer />
             <PlaceholderContainer />
             <Routes>
               <Route path="/" element={<SectionOne />} />
