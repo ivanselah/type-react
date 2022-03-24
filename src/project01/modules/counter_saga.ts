@@ -1,14 +1,15 @@
 import { delay, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { createAction } from "@reduxjs/toolkit";
 
 const INCREASE = "INCREASE";
 const DECREASE = "DECREASE";
 const INCREASE_ASYNC = "INCREASE_ASYNC";
 const DECREASE_ASYNC = "DECREASE_ASYNC";
 
-export const increase_saga = () => ({ type: INCREASE });
-export const decrease_saga = () => ({ type: DECREASE });
-export const increaseAsync_saga = () => ({ type: INCREASE_ASYNC });
-export const decreaseAsync_saga = () => ({ type: DECREASE_ASYNC });
+export const increase_saga = createAction(INCREASE);
+export const decrease_saga = createAction(DECREASE);
+export const increaseAsync_saga = createAction(INCREASE_ASYNC);
+export const decreaseAsync_saga = createAction(DECREASE_ASYNC);
 
 function* increaseSaga() {
   yield delay(1000);

@@ -25,7 +25,7 @@ function CounterContainer() {
 
   return (
     <div>
-      <Counter {...counterProps} />
+      <Counter />
     </div>
   );
 }

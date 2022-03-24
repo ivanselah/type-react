@@ -25,6 +25,7 @@ import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
 import { Home, SectionOne } from "./project01/home";
 import CounterSagaContainer from "./project01/containers/CounterSagaContainer";
+import ContextComponent from "./project01/contextApi/ContextComponent";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -41,13 +42,14 @@ ReactDOM.render(
       <BrowserRouter>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
-            {/* <CounterContainer />
-            <TodosContainer /> */}
+            <CounterContainer />
+            <TodosContainer />
             <CounterSagaContainer />
             <PlaceholderContainer />
+            {/* <ContextComponent /> */}
             <Routes>
-              <Route path="/" element={<SectionOne />} />
-              <Route path="/:id" element={<Home />} />
+              <Route path='/' element={<SectionOne />} />
+              <Route path='/:id' element={<Home />} />
             </Routes>
           </QueryClientProvider>
         </Provider>
