@@ -14,6 +14,7 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import CounterContainer from "./project01/containers/CounterContainer";
@@ -47,6 +48,7 @@ ReactDOM.render(
             <CounterSagaContainer />
             <PlaceholderContainer />
             {/* <ContextComponent /> */}
+            <ReactQueryDevtools initialIsOpen={true} />
             <Routes>
               <Route path='/' element={<SectionOne />} />
               <Route path='/:id' element={<Home />} />
