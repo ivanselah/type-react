@@ -39,3 +39,26 @@ function TestHooks() {
     </div>
   );
 }
+
+function getBanana() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('🍌');
+    }, 1000);
+  });
+}
+
+function getWatermelon() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('🍉');
+    }, 3000);
+  });
+}
+
+async function getFruits() {
+  const banana = await getBanana();
+  const watermelon = await getWatermelon();
+  return [banana, watermelon];
+}
+getFruits().then(console.log);
