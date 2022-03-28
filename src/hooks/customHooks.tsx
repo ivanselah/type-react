@@ -62,3 +62,22 @@ async function getFruits() {
   return [banana, watermelon];
 }
 getFruits().then(console.log);
+
+const dog = { name: '멍멍', emoji: '🦮' };
+
+console.log(Object.keys(dog));
+console.log(Object.values(dog));
+console.log(Object.entries(dog));
+
+console.log('name' in dog);
+console.log(dog.hasOwnProperty('name'));
+
+const temp = Object.getOwnPropertyDescriptors(dog);
+console.log(temp);
+
+Object.defineProperty(dog, 'name', {
+  value: '안되',
+  writable: false,
+  enumerable: false,
+  configurable: false,
+});
