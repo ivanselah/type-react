@@ -14,7 +14,7 @@ type TodoListQuery = {
 };
 
 function TodosContainer() {
-  const { isLoading, data } = useQuery<TodoListQuery[]>("todos", getTodosList);
+  const { isLoading, data,  } = useQuery<TodoListQuery[]>("todos", getTodosList);
   const [todo, setTodo] = useState<TodoListQuery[]>([]);
 
   const dispatch = useDispatch();
