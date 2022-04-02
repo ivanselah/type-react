@@ -27,6 +27,7 @@ import createSagaMiddleware from 'redux-saga';
 import { Home, SectionOne } from './project01/home';
 import CounterSagaContainer from './project01/containers/CounterSagaContainer';
 import ContextComponent from './project01/contextApi/ContextComponent';
+import CounterComponent from './project01/views/CounterComponent';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -43,7 +44,8 @@ ReactDOM.render(
       <BrowserRouter>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
-            <CounterContainer />
+            {/* <CounterContainer /> */}
+            <CounterComponent />
             <TodosContainer />
             <CounterSagaContainer />
             <PlaceholderContainer />
