@@ -1,84 +1,75 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css');
 
-* {
-  box-sizing: border-box;
-}
-
 body {
   background-color: #dde1d4;
   padding: 15px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  max-width: 1200px;
-  width: 100%;
+  max-width: 1100px;
   height: 100vh;
   margin: 0 auto;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 300px);
-  grid-template-rows: 150px repeat(3, 300px) repeat(2, 200px);
-  gap: 20px;
+  height: 65vh;
+  font-size: 3.5rem;
+  font-weight: bold;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
 }
 
-.header {
-  background-color: #000000;
-  grid-column-start: 1;
-  grid-column-end: 4;
+.flex-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.child:first-child {
+  background-color: #dae7df;
+  color: #f44606;
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.child:nth-child(2) {
+  background-color: #008a69;
   color: #fff;
-  font-size: 25px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 20px 15px;
-}
-.header-first {
-  width: 500px;
-  display: flex;
-}
-.header-first p:first-child {
-  margin-right: 30px;
+  grid-column: span 2;
+  grid-row: span 2;
 }
 
-.bad {
-  background-color: #f14011;
-  grid-column-start: 1;
-  grid-column-end: 3;
-  grid-row-start: 2;
-  grid-row-end: 4;
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: flex-start;
-  justify-content: end;
-  padding: 0 5px;
+.child:nth-child(3) {
+  background-color: #f44606;
+  color: #fff;
+  grid-column: span 2;
+  grid-row: span 2;
 }
-.bad h1 {
-  font-size: 275px;
+
+.child-grid {
+  grid-column: span 2;
+  grid-row: span 2;
+  display: grid;
+  font-size: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  color: #f44606;
   font-weight: bold;
 }
-.bad-next {
-  background-color: #f14011;
-  grid-column-start: 3;
-  grid-column-end: 4;
-  grid-row-start: 2;
-  grid-row-end: 4;
-}
-.religion {
-  background-color: #f14011;
-  grid-column-start: 1;
-  grid-column-end: 4;
-  grid-row-start: 4;
-  grid-row-end: 6;
-  padding: 0 5px;
-}
-.religion-div h1 {
-  font-size: 275px;
-  font-weight: bold;
-  margin-bottom: 40px;
+
+.child-grid .one {
+  background-color: #f8abc5;
 }
 
-.religion-div p {
+.child-grid .two {
   color: #fff;
-  font-size: 60px;
-  padding-left: 10px;
+  background-color: #5f5fa9;
+}
+
+.child-grid .three {
+  background-color: #ffc028;
+}
+
+.child-grid .four {
+  background-color: #f97374;
+  color: #fff;
 }
